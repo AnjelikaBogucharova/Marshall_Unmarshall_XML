@@ -3,15 +3,17 @@ package marshalling_xml
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import java.io.File
+import java.text.SimpleDateFormat
 
-fun main (){
+fun main() {
+    val sf = SimpleDateFormat("yyyy-MM-dd")
     val hobby1 = listOf(
             Hobby("10", "Bycicle")
     )
     val person1 = Person(
-            "Ivanov Viacheslav Igorevich",
-            "1994-09-09",
-            Hobbies(hobby1)
+            name = "Ivanov Viacheslav Igorevich",
+            birthday = sf.parse("1994-09-09"),
+            hobbies = Hobbies(hobby1)
     )
     val hobby2 = listOf(
             Hobby("20", "Monocicle"),
@@ -19,13 +21,13 @@ fun main (){
     )
     val person2 = Person(
             "Fdafds Afcbfh Hhfgndfg",
-            "1984-11-11",
+            sf.parse("1984-11-11"),
             Hobbies(hobby2)
     )
     val hobby3 = listOf(Hobby("30", "Tricicle"))
     val person3 = Person(
             "Kkpobmhtg Bklbjierg Okjdvopv",
-            "1974-12-12",
+            sf.parse("1974-12-12"),
             Hobbies(hobby3)
     )
     val persons = Persons(
@@ -60,6 +62,7 @@ fun writeXMLString(obj: Any): String {
     xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
     return xmlMapper.writeValueAsString(obj)
 }
+
 /*
  * Write Object to XML file
  */
@@ -68,10 +71,11 @@ fun writeXMLFile(obj: Any, pathFile: String) {
     xmlMapper.enable(SerializationFeature.INDENT_OUTPUT)
     xmlMapper.writeValue(File(pathFile), obj)
 }
+
 /*
  * Write XML file to Object
  */
-fun convertXmlFileDataObject(pathFile: String, cls: Class<*>): Any{
+fun convertXmlFileDataObject(pathFile: String, cls: Class<*>): Any {
     val xmlMapper = XmlMapper()
     return xmlMapper.readValue(File(pathFile), cls)
 }
